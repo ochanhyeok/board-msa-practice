@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.board.comment.repository.ArticleCommentCountRepository;
 import com.board.comment.service.CommentService;
 import com.board.comment.service.CommentServiceV2;
 import com.board.comment.service.request.CommentCreateRequest;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class CommentControllerV2 {
 
 	private final CommentServiceV2 commentService;
+	private final ArticleCommentCountRepository articleCommentCountRepository;
 
 	@GetMapping("/v2/comments/{commentId}")
 	public CommentResponse read(
@@ -58,5 +60,12 @@ public class CommentControllerV2 {
 		@RequestParam("pageSize") Long pageSize
 	) {
 		return commentService.readAllInfiniteScroll(articleId, lastPath, pageSize);
+	}
+
+	@GetMapping("/v2/comments/articles/{articleId}/count")
+	public Long count(
+		@PathVariable("articleId") Long articleId
+	) {
+		return commentService.count(articleId);
 	}
 }
